@@ -1,11 +1,15 @@
-using PierresTreats.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using PierresTreats.Models;
 using System.Collections.Generic;
 using System.Linq;
-namespace PierresTreats.Controllers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
+[Authorize]
 public class TreatsController : Controller
 {
   private readonly ProjectContext _db;
@@ -14,7 +18,7 @@ public class TreatsController : Controller
   {
     _db = db;
   }
-
+  [AllowAnonymous]
   public ActionResult Index()
   {
     if (TempData["Message"] != null)
@@ -37,11 +41,11 @@ public class TreatsController : Controller
     _db.Treats.Add(newTreat);
     _db.SaveChanges();
     if(splashOrDetails)
-    {return RedirectToAction("AddFlavore", new {id = newTreat.TreatId});}
+    {return RedirectToAction("ManageFlavors", new {id = newTreat.TreatId});}
     else
     {return RedirectToAction("Index");}
   }
-
+  [AllowAnonymous]
   public ActionResult Details(int id)
   {
     Treat model = _db.Treats

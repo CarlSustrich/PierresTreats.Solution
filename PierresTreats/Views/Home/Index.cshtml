@@ -1,4 +1,27 @@
 @{
   Layout = "_Layout";
 }
-<h1>splishy splashy</h1>
+<h1 class="text-warning">@ViewBag.Message</h1>
+<h1>Available Treats and Flavors:</h1>
+<hr>
+<div class="container">
+  <div class="row">
+    <div class="col">Treats</div>
+    <div class="col">Flavors</div>
+  </div>
+  @for(int i=0; i<Math.Max(ViewBag.Flavors.Count, ViewBag.Treats.Count); i++)
+  {
+    <div class="row">
+      @if(i<ViewBag.Treats.Count)
+      {
+        <div class="col">@Html.ActionLink($"{ViewBag.Treats[i].TreatName}", "Details", "Treats", new {id = ViewBag.Treats[i].TreatId})</div>
+      }
+      else{<div class="col">-</div>}
+      @if(i<ViewBag.Flavors.Count)
+      {
+        <div class="col">@Html.ActionLink($"{ViewBag.Flavors[i].FlavorName}", "Details", "Flavors", new {id = ViewBag.Flavors[i].FlavorId})</div>
+      }
+      else{<div class="col">-</div>}
+    </div>
+  }
+</div>

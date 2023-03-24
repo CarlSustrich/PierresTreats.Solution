@@ -18,11 +18,11 @@ public class HomeController : Controller
   [HttpGet("/")]
   public ActionResult Index() 
   {
-    // if (TempData["Message"] != null)
-    // {
-    //   ViewBag.Message = TempData["Message"];
-    //   TempData.Remove("Message");
-    // }
+    if (TempData["Message"] != null)
+    {
+      ViewBag.Message = TempData["Message"];
+      TempData.Remove("Message");
+    }
     ViewBag.Treats = _db.Treats.ToList();
     ViewBag.Flavors = _db.Flavors.ToList();
     return View();
