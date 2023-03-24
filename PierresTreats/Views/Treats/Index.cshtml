@@ -7,17 +7,12 @@
 <hr>
 @if(Model.Count != 0)
 {
-  <form method="post" action="/Treats/MassDelete">
-    <table>
+    <ul>
       @foreach (Treat item in Model)
       {
-        <tr>
-          <td>@Html.ActionLink($"{item.TreatName}", "Details", "Treats", new {id = item.TreatId})</td>
-          <td><input type="checkbox" name="deleteWho" value="@item.TreatId"></td>
-        </tr>
+        <li>@Html.ActionLink($"{item.TreatName}", "Details", "Treats", new {id = item.TreatId})</li>
+        <br>
       }
-    </table>
-    <input type="submit", value="Delete the selected treats">
-  </form>
+    </ul>
 }
 @Html.ActionLink("Add a new treat", "Create", "Treats")

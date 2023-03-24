@@ -1,0 +1,33 @@
+@{
+  Layout = "_Layout";
+}
+
+
+@using PierresTreats.Models;
+
+
+<h1>What flavors do you have @Model.TreatName available in?</h1>
+<form method = "post">
+  <table class="table">
+    <tr>
+      <th>Flavor</th>
+      <th>Select</th>
+    </tr>
+    @foreach (Flavor item in @ViewBag.ExistingFlavors)
+    {
+      <tr>
+        <td>@item.FlavorName</td>
+        <td><input name="flavorList" type="checkbox" value="@item.FlavorId" checked="checked"></td>
+      </tr>
+    }
+    @foreach (Flavor item in @ViewBag.NonAssociatedFlavors)
+    {
+      <tr>
+        <td>@item.FlavorName</td>
+        <td><input name="flavorList" type="checkbox" value="@item.FlavorId"></td>
+      </tr>
+    }
+  </table>
+<input type="hidden" name="treatId" value="@Model.TreatId">
+<input type="submit" value="save changes">
+</form>

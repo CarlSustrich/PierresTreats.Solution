@@ -51,47 +51,64 @@ public class FlavorsController : Controller
     return View(model);
   }
 
-//   public ActionResult AddCert(int id)
-//   {
-//     ViewBag.Machines = _db.Machines.ToList();
-//     return View(_db.Engineers.FirstOrDefault(peep=>peep.EngineerId == id));
-//   }
+  public ActionResult ManageTreats(int id)
+  {
+    Flavor targetFlavor = _db.Flavors
+      .Include(thing => thing.Joins)
+      .ThenInclude(thing => thing.Treat)
+      .FirstOrDefault(book => book.FlavorId == id);
 
-//   [HttpPost]
-//   public ActionResult AddCert(List<int> wutMachines, int engineerId)
-//   {
-//     if(wutMachines.Count == 0)
-//     {
-//       @ViewBag.Success = "No machines were selected";
-//       ViewBag.Machines = _db.Machines.ToList();
-//       return View(_db.Engineers.FirstOrDefault(peep=>peep.EngineerId == engineerId));
-//     }
+    ViewBag.ExistingTreats = targetFlavor.Joins
+      .Where(entry => entry.FlavorId == targetFlavor.FlavorId)
+      .Select(entry => entry.Treat)
+      .Distinct()
+      .ToList();
+
+    ViewBag.NonAssociatedTreats = _db.Treats
+      .Include(item => item.Joins)
+      .ThenInclude(item => item.Flavor)
+      .Where(item => !item.Joins.Any(entry => entry.FlavorId == targetFlavor.FlavorId))
+      .ToList();
+  
+    return View(targetFlavor);
+  }
+  
+  [HttpPost]
+  public ActionResult ManageTreats(List<int> treatList, int flavorId)
+  {
+    Flavor targetFlavor = _db.Flavors.FirstOrDefault(item=>item.FlavorId == flavorId);
+    IQueryable<PierresTreats.Models.FlavorTreat> treatsToRemove = _db.FlavorTreats.Where(item => item.FlavorId == flavorId);
+    _db.FlavorTreats.RemoveRange(treatsToRemove);
     
-//     foreach (int item in wutMachines)
-//     {
-//       #nullable enable
-//       RepairCert? joinCheck = _db.RepairCerts.FirstOrDefault(genericPlaceHolderVariableName => (genericPlaceHolderVariableName.EngineerId == engineerId && genericPlaceHolderVariableName.MachineId == item));
-//       #nullable disable
-//       if(joinCheck == null && engineerId != 0)
-//       {
-//         _db.RepairCerts.Add(new RepairCert() {MachineId=item, EngineerId=engineerId});
-//         _db.SaveChanges();
-//       }
-//     }
-//     return RedirectToAction("Details", new {id = engineerId});
-//   }
 
-//   [HttpPost]
-//   public ActionResult MassDelete(List<int> deleteWho)
-//   {
-//     foreach(int item in deleteWho)
-//     {
-//       _db.Engineers.Remove(_db.Engineers.FirstOrDefault(person=>person.EngineerId == item));
-//       _db.SaveChanges();
-//     }
-//     TempData["Message"] = "Deleted the selected Engineers";
-//     return RedirectToAction("Index");
-//   }
+    if(treatList.Count != 0)
+    {
+      foreach(int treat in treatList)
+      {
+        _db.FlavorTreats.Add(new FlavorTreat() {FlavorId = flavorId, TreatId = treat });
+        _db.SaveChanges();
+      }
+    }
+    return Redirect($"/Flavors/Details/{flavorId}");
+  }
+
+  public ActionResult Delete(int id)
+  {
+    Flavor model = _db.Flavors
+      .Include(thing=>thing.Joins)
+      .ThenInclude(thing=>thing.Treat)
+      .FirstOrDefault(otherthing => (otherthing.FlavorId == id));
+    return View(model);
+  }
+
+  [HttpPost, ActionName("Delete")]
+  public ActionResult DeleteConfirmed(int id)
+  {
+    Flavor targetFlavor = _db.Flavors.FirstOrDefault(item => item.FlavorId == id);
+    _db.Flavors.Remove(targetFlavor);
+    _db.SaveChanges();
+    return RedirectToAction("Index");
+  }
 
 //   public ActionResult Edit(int id)
 //   {

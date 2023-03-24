@@ -50,4 +50,63 @@ public class TreatsController : Controller
       .FirstOrDefault(otherthing => (otherthing.TreatId == id));
     return View(model);
   }
+
+  public ActionResult ManageFlavors(int id)
+  {
+    Treat targetTreat = _db.Treats
+      .Include(thing => thing.Joins)
+      .ThenInclude(thing => thing.Flavor)
+      .FirstOrDefault(book => book.TreatId == id);
+
+    ViewBag.ExistingFlavors = targetTreat.Joins
+      .Where(entry => entry.TreatId == targetTreat.TreatId)
+      .Select(entry => entry.Flavor)
+      .Distinct()
+      .ToList();
+
+    ViewBag.NonAssociatedFlavors = _db.Flavors
+      .Include(item => item.Joins)
+      .ThenInclude(item => item.Treat)
+      .Where(item => !item.Joins.Any(entry => entry.TreatId == targetTreat.TreatId))
+      .ToList();
+  
+    return View(targetTreat);
+  }
+
+  [HttpPost]
+  public ActionResult ManageFlavors(List<int> flavorList, int treatId)
+  {
+    Treat targetTreat = _db.Treats.FirstOrDefault(item=>item.TreatId == treatId);
+    IQueryable<PierresTreats.Models.FlavorTreat> flavorsToRemove = _db.FlavorTreats.Where(item => item.TreatId == treatId);
+    _db.FlavorTreats.RemoveRange(flavorsToRemove);
+    
+
+    if(flavorList.Count != 0)
+    {
+      foreach(int flavor in flavorList)
+      {
+        _db.FlavorTreats.Add(new FlavorTreat() {FlavorId = flavor, TreatId = treatId });
+        _db.SaveChanges();
+      }
+    }
+    return Redirect($"/Treats/Details/{treatId}");
+  }
+
+  public ActionResult Delete(int id)
+  {
+    Treat model = _db.Treats
+      .Include(thing=>thing.Joins)
+      .ThenInclude(thing=>thing.Flavor)
+      .FirstOrDefault(otherthing => (otherthing.TreatId == id));
+    return View(model);
+  }
+
+  [HttpPost, ActionName("Delete")]
+  public ActionResult DeleteConfirmed(int id)
+  {
+    Treat targetTreat = _db.Treats.FirstOrDefault(item => item.TreatId == id);
+    _db.Treats.Remove(targetTreat);
+    _db.SaveChanges();
+    return RedirectToAction("Index");
+  }
 }

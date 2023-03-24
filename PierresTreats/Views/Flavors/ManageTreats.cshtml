@@ -1,0 +1,33 @@
+@{
+  Layout = "_Layout";
+}
+
+
+@using PierresTreats.Models;
+
+
+<h1>What types of @Model.FlavorName treats do you have available?</h1>
+<form method = "post">
+  <table class="table">
+    <tr>
+      <th>Treat Name</th>
+      <th>Select</th>
+    </tr>
+    @foreach (Treat item in @ViewBag.ExistingTreats)
+    {
+      <tr>
+        <td>@item.TreatName</td>
+        <td><input name="treatList" type="checkbox" value="@item.TreatId" checked="checked"></td>
+      </tr>
+    }
+    @foreach (Treat item in @ViewBag.NonAssociatedTreats)
+    {
+      <tr>
+        <td>@item.TreatName</td>
+        <td><input name="treatList" type="checkbox" value="@item.TreatId"></td>
+      </tr>
+    }
+  </table>
+<input type="hidden" name="flavorId" value="@Model.FlavorId">
+<input type="submit" value="save changes">
+</form>

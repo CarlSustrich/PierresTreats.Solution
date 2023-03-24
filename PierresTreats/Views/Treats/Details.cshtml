@@ -8,17 +8,13 @@
 <h5>Flavors:</h5>
 @if(Model.Joins.Count != 0)
 {
-  <form method="post" action="/FlavorTreats/Delete">
-    <table>
-      @foreach (FlavorTreat item in Model.Joins)
-      {
-        <tr>
-          <td>*</td>
-          <td>@Html.ActionLink($"{@item.Flavor.FlavorName}", "Details", "Flavors", new {id = item.Flavor.FlavorId})</td>
-          <td><input type="checkbox" name="deleteWhich" value="@item.FlavorTreatId"></td>
-        </tr>
-      }
-    </table>
-    <input type="submit" value="Remove the selected flavor profiles from this treat">
-  </form>
+  <ul>
+    @foreach (FlavorTreat item in Model.Joins)
+    {
+      <li>@Html.ActionLink($"{@item.Flavor.FlavorName}", "Details", "Flavors", new {id = item.Flavor.FlavorId})</li>
+    }
+  </ul>
 }
+@Html.ActionLink("Delete This Treat", "Delete", new {id = Model.TreatId})
+<br>
+@Html.ActionLink("Manage This Treats available Flavors", "ManageFlavors", new {id = Model.TreatId})
