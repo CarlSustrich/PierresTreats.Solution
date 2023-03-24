@@ -1,0 +1,24 @@
+@{
+  Layout = "_Layout";
+}
+@using PierresTreats.Models;
+
+<h1>Treat Details View</h1>
+<h4>@Model.TreatName</h4>
+<h5>Flavors:</h5>
+@if(Model.Joins.Count != 0)
+{
+  <form method="post" action="/FlavorTreats/Delete">
+    <table>
+      @foreach (FlavorTreat item in Model.Joins)
+      {
+        <tr>
+          <td>*</td>
+          <td>@Html.ActionLink($"{@item.Flavor.FlavorName}", "Details", "Flavors", new {id = item.Flavor.FlavorId})</td>
+          <td><input type="checkbox" name="deleteWhich" value="@item.FlavorTreatId"></td>
+        </tr>
+      }
+    </table>
+    <input type="submit" value="Remove the selected flavor profiles from this treat">
+  </form>
+}
