@@ -109,4 +109,18 @@ public class TreatsController : Controller
     _db.SaveChanges();
     return RedirectToAction("Index");
   }
+
+  public ActionResult Edit(int id)
+  {
+    return View(_db.Treats.FirstOrDefault(thing=>thing.TreatId == id));
+  }
+
+  [HttpPost]
+  public ActionResult Edit(Treat updatedTreat)
+  {
+    _db.Treats.Update(updatedTreat);
+    _db.SaveChanges();
+    TempData["Message"] = "Treat's Info Updated";
+    return RedirectToAction("Index");
+  }
 }

@@ -110,17 +110,17 @@ public class FlavorsController : Controller
     return RedirectToAction("Index");
   }
 
-//   public ActionResult Edit(int id)
-//   {
-//     return View(_db.Engineers.FirstOrDefault(thing=>thing.EngineerId == id));
-//   }
+  public ActionResult Edit(int id)
+  {
+    return View(_db.Flavors.FirstOrDefault(thing=>thing.FlavorId == id));
+  }
 
-//   [HttpPost]
-//   public ActionResult Edit(Engineer updatedEngineer)
-//   {
-//     _db.Engineers.Update(updatedEngineer);
-//     _db.SaveChanges();
-//     TempData["Message"] = "Engineer's Info Updated";
-//     return RedirectToAction("Index");
-//   }
+  [HttpPost]
+  public ActionResult Edit(Flavor updatedFlavor)
+  {
+    _db.Flavors.Update(updatedFlavor);
+    _db.SaveChanges();
+    TempData["Message"] = "Flavor's Info Updated";
+    return RedirectToAction("Index");
+  }
 }
