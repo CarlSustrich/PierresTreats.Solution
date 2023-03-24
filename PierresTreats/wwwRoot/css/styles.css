@@ -1,36 +1,3 @@
-/* #navLinks {
-  overflow: hidden;
-  background-color: #333;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-#navLinks a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-#navLinks a:hover {
-  background: #ddd;
-  color: black;
-}
-
-.main {
-  margin-top: 50px;
-}
-
-.account a {
-  float: right;
-  margin-right: 0px;
-  margin-left: auto;
-} */
-
-
 #navLinks {
   position:fixed;
   background-color: #333;
@@ -48,10 +15,23 @@
 }
 
 #navLinks a:hover {
-background-color: #ddd;
-color: black;
+  background-color: #ddd;
+  color: black;
 }
 
 .account {
-float: right;
+  float: right;
+}
+
+.account a {
+  /* background-image: url('../img/account.png');
+  background-repeat: no-repeat;
+  display: inline-block; */
+  /* height: 50px;
+  width: 150px; */
+  /* text-indent: -9999px; */
+}
+
+.main {
+  margin-top: 75px;
 }
