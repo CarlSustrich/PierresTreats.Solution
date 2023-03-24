@@ -1,0 +1,17 @@
+@{
+  Layout = "_Layout";
+}
+@model PierresTreats.Models.Flavor;
+
+<h1>Record a new Flavor Profile</h1>
+@using (Html.BeginForm())
+{
+  @Html.ValidationMessageFor(model => model.FlavorName, "", new { @class = "text-danger", @style = "font-weight: 600;" })
+  @Html.LabelFor(model=>model.FlavorName)
+  @Html.EditorFor(model=>model.FlavorName)
+  <br>
+  @Html.Label("Add Treats to this Flavor Profile now?")
+  @Html.CheckBox("splashOrDetails", true)
+  <br>
+  <button>Save!</button>
+}
